@@ -59,102 +59,114 @@ namespace BlinkBank.Controllers
             return View(account);
         }
 
-        // POST: Withdraw or Deposit
+        // POST: Withdraw
         [HttpPost]
         public async Task<IActionResult> Withdraw(int accountId, decimal amount)
         {
-            if (amount <= 0) // Check for negative amount
+            if (!ModelState.IsValid)
             {
-                TempData["ErrorMessage"] = "You should not put a negative amount.";
-                return View(); // Return the view with the error message
+                TempData["ErrorMessage"] = "Invalid input. Please check your values.";
+                return View();
             }
 
-            if (ModelState.IsValid)
+            if (amount <= 0)
             {
-                var account = await _context.Accounts.Include(a => a.Transactions).FirstOrDefaultAsync(a => a.Id == accountId);
-                if (account == null)
-                {
-                    TempData["ErrorMessage"] = "Account not found.";
-                    return NotFound();
-                }
-
-                if (account.InitialBalance < amount)
-                {
-                    TempData["ErrorMessage"] = "Insufficient funds. You cannot withdraw more than your current balance.";
-                    return View();
-                }
-
-                if (account.InitialBalance - amount < MinBalanceForWithdrawal)
-                {
-                    TempData["ErrorMessage"] = $"Insufficient funds. Minimum balance of {MinBalanceForWithdrawal} must remain.";
-                    return View();
-                }
-
-                account.InitialBalance -= amount;
-
-                // Log the transaction
-                var transaction = new Transactions
-                {
-                    AccountId = account.Id,
-                    TransactionType = "withdraw",
-                    Amount = amount,
-                    Date = DateTime.Now
-                };
-                _context.Update(account);
-                _context.Transactions.Add(transaction);
-
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Transaction successful.";
-                return RedirectToAction("Index", "Transactions", new { accountId });
+                ModelState.AddModelError("amount", "Withdrawal amount must be greater than zero.");
+                return View();
             }
 
-            return View();
+            var account = await _context.Accounts
+                .Include(a => a.Transactions)
+                .FirstOrDefaultAsync(a => a.Id == accountId);
+
+            if (account == null)
+            {
+                TempData["ErrorMessage"] = "Account not found.";
+                return NotFound();
+            }
+
+            decimal minBalance = FinancialConstants.MIN_ACCOUNT_BALANCE;
+
+            if (account.InitialBalance < amount)
+            {
+                ModelState.AddModelError("amount", "Insufficient funds. You cannot withdraw more than your current balance.");
+                return View();
+            }
+
+            if (account.InitialBalance - amount < minBalance)
+            {
+                ModelState.AddModelError("amount", $"Insufficient funds. Your balance cannot go below the minimum required: {minBalance}.");
+                return View();
+            }
+
+            // تنفيذ السحب
+            account.InitialBalance -= amount;
+
+            var transaction = new Transactions
+            {
+                AccountId = account.Id,
+                TransactionType = "withdraw",
+                Amount = amount,
+                Date = DateTime.Now
+            };
+
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Withdrawal successful.";
+            return RedirectToAction("Index", "Transactions", new { accountId });
         }
 
         [HttpPost]
         public async Task<IActionResult> Deposit(int accountId, decimal amount)
         {
-            if (amount <= 0) // Check for negative amount
+            if (!ModelState.IsValid)
             {
-                TempData["ErrorMessage"] = "You should not put a negative amount.";
-                return View(); // Return the view with the error message
+                TempData["ErrorMessage"] = "Invalid input. Please check your values.";
+                return View();
             }
 
-            if (ModelState.IsValid)
+            if (amount <= 0)
             {
-                var account = await _context.Accounts.Include(a => a.Transactions).FirstOrDefaultAsync(a => a.Id == accountId);
-                if (account == null)
-                {
-                    TempData["ErrorMessage"] = "Account not found.";
-                    return NotFound();
-                }
-
-                if (amount > MaxDepositAmount)
-                {
-                    TempData["ErrorMessage"] = $"Deposit cannot exceed {MaxDepositAmount}.";
-                    return View();
-                }
-
-                account.InitialBalance += amount;
-
-                // Log the transaction
-                var transaction = new Transactions
-                {
-                    AccountId = account.Id,
-                    TransactionType = "deposit",
-                    Amount = amount,
-                    Date = DateTime.Now
-                };
-                _context.Transactions.Add(transaction);
-
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Transaction successful.";
-                return RedirectToAction("Index", "Transactions", new { accountId });
+                ModelState.AddModelError("amount", "Deposit amount must be greater than zero.");
+                return View();
             }
 
-            return View();
+            var account = await _context.Accounts
+                .Include(a => a.Transactions)
+                .FirstOrDefaultAsync(a => a.Id == accountId);
+
+            if (account == null)
+            {
+                TempData["ErrorMessage"] = "Account not found.";
+                return NotFound();
+            }
+
+            decimal maxDeposit = FinancialConstants.MAX_DEPOSIT_AMOUNT;
+
+            if (amount > maxDeposit)
+            {
+                ModelState.AddModelError("amount", $"Deposit amount cannot exceed {maxDeposit}.");
+                return View();
+            }
+
+            // تنفيذ الإيداع
+            account.InitialBalance += amount;
+
+            var transaction = new Transactions
+            {
+                AccountId = account.Id,
+                TransactionType = "deposit",
+                Amount = amount,
+                Date = DateTime.Now
+            };
+
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Deposit successful.";
+            return RedirectToAction("Index", "Transactions", new { accountId });
         }
-
 
         // GET: Transfer
         [HttpGet]
@@ -173,69 +185,83 @@ namespace BlinkBank.Controllers
         [HttpPost]
         public async Task<IActionResult> Transfer(int accountId, string targetAccountNumber, decimal amount)
         {
-            if (amount <= 0) // Check for negative amount
+            if (!ModelState.IsValid)
             {
-                TempData["ErrorMessage"] = "You should not put a negative amount.";
-                return View(); // Return the view with the error message
+                TempData["ErrorMessage"] = "Invalid input. Please check your values.";
+                return View();
             }
 
-            if (ModelState.IsValid)
+            if (amount <= 0)
             {
-                var sourceAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == accountId);
-                var targetAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountNumber == targetAccountNumber);
-
-                if (sourceAccount == null || targetAccount == null)
-                {
-                    TempData["ErrorMessage"] = "Source account or target account not found.";
-                    return View();
-                }
-
-                // Check if the source account has sufficient balance
-                if (sourceAccount.InitialBalance < amount)
-                {
-                    TempData["ErrorMessage"] = "Insufficient funds. You cannot transfer more than your current balance.";
-                    return View();
-                }
-
-                // Ensure the minimum balance requirement is met after the transfer
-                if (sourceAccount.InitialBalance - amount < MinBalanceForWithdrawal)
-                {
-                    TempData["ErrorMessage"] = $"Insufficient funds. Minimum balance of {MinBalanceForWithdrawal} must remain.";
-                    return View();
-                }
-
-                sourceAccount.InitialBalance -= amount;
-                targetAccount.InitialBalance += amount;
-
-                // Log the transactions
-                var sourceTransaction = new Transactions
-                {
-                    AccountId = sourceAccount.Id,
-                    TransactionType = "transfer_out",
-                    Amount = amount,
-                    targetAccountNumber = targetAccount.AccountNumber,
-                    Date = DateTime.Now
-                };
-                var targetTransaction = new Transactions
-                {
-                    AccountId = targetAccount.Id,
-                    TransactionType = "transfer_in",
-                    Amount = amount,
-                    Date = DateTime.Now,
-                    sourceAccountNumber = sourceAccount.AccountNumber
-                };
-                _context.Update(sourceAccount);
-                _context.Update(targetAccount);
-                _context.Transactions.Add(sourceTransaction);
-                _context.Transactions.Add(targetTransaction);
-
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Transfer successful.";
-                return RedirectToAction("Index", "Transactions", new { accountId = sourceAccount.Id });
+                ModelState.AddModelError("amount", "Transfer amount must be greater than zero.");
+                return View();
             }
 
-            return View();
+            var sourceAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == accountId);
+            var targetAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountNumber == targetAccountNumber);
+
+            if (sourceAccount == null)
+            {
+                ModelState.AddModelError("", "Source account not found.");
+                return View();
+            }
+
+            if (targetAccount == null)
+            {
+                ModelState.AddModelError("targetAccountNumber", "Target account not found.");
+                return View();
+            }
+
+            decimal minBalance = BlinkBank.Constants.FinancialConstants.MIN_ACCOUNT_BALANCE;
+
+            // التحقق من توفر الرصيد الكافي
+            if (sourceAccount.InitialBalance < amount)
+            {
+                ModelState.AddModelError("amount", "Insufficient funds. You cannot transfer more than your current balance.");
+                return View();
+            }
+
+            // التأكد من أن الرصيد المتبقي لا ينخفض عن الحد الأدنى بعد التحويل
+            if (sourceAccount.InitialBalance - amount < minBalance)
+            {
+                ModelState.AddModelError("amount", $"Insufficient funds. Your balance cannot go below the minimum required: {minBalance}.");
+                return View();
+            }
+
+            // تنفيذ التحويل
+            sourceAccount.InitialBalance -= amount;
+            targetAccount.InitialBalance += amount;
+
+            // تسجيل العمليات المالية
+            var sourceTransaction = new Transactions
+            {
+                AccountId = sourceAccount.Id,
+                TransactionType = "transfer_out",
+                Amount = amount,
+                targetAccountNumber = targetAccount.AccountNumber,
+                Date = DateTime.Now
+            };
+
+            var targetTransaction = new Transactions
+            {
+                AccountId = targetAccount.Id,
+                TransactionType = "transfer_in",
+                Amount = amount,
+                Date = DateTime.Now,
+                sourceAccountNumber = sourceAccount.AccountNumber
+            };
+
+            _context.Update(sourceAccount);
+            _context.Update(targetAccount);
+            _context.Transactions.Add(sourceTransaction);
+            _context.Transactions.Add(targetTransaction);
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Transfer successful.";
+            return RedirectToAction("Index", "Transactions", new { accountId = sourceAccount.Id });
         }
+
 
     }
 }

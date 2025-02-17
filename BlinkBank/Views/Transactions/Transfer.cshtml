@@ -71,9 +71,14 @@
         $(document).ready(function () {
             $('form').submit(function (event) {
                 var amount = parseFloat($('input[name="amount"]').val());
+                var currentBalance = parseFloat('@Model.InitialBalance');  
+                var minBalance = parseFloat('@BlinkBank.Constants.FinancialConstants.MIN_ACCOUNT_BALANCE');
 
                 if (amount <= 0) {
                     $('#amountError').text('Transfer amount must be greater than zero.').show();
+                    event.preventDefault();
+                } else if (currentBalance - amount < minBalance) {
+                    $('#amountError').text(`You cannot transfer. Minimum account balance must be ${minBalance}.`).show();
                     event.preventDefault();
                 } else {
                     $('#amountError').hide();
@@ -81,5 +86,4 @@
             });
         });
     </script>
-
 }

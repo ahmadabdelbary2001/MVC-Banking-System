@@ -64,31 +64,23 @@
         $(document).ready(function () {
             $('form').submit(function (event) {
                 var amount = parseFloat($('input[name="amount"]').val());
-                if (amount <= 0) {
-                    $('#amountError').show();
+                var maxDeposit = parseFloat('@BlinkBank.Constants.FinancialConstants.MAX_DEPOSIT_AMOUNT'); 
+
+                if (isNaN(amount) || amount <= 0) {
+                    $('#amountError').text('Deposit amount must be greater than zero.').show();
                     event.preventDefault();
-                } else {
-                    $('#amountError').hide();
+                    return;
                 }
+
+                if (amount > maxDeposit) {
+                    $('#amountError').text('Deposit cannot exceed ' + maxDeposit + '.').show();
+                    event.preventDefault();
+                    return;
+                }
+
+                $('#amountError').hide();
             });
         });
-
-        $(document).ready(function () {
-    $('form').submit(function (event) {
-        var amount = parseFloat($('input[name="amount"]').val());
-        var currentBalance = parseFloat('@Model.InitialBalance');  
-        
-        if (amount <= 0) {
-            $('#amountError').text('Deposit amount must be greater than zero.').show();
-            event.preventDefault();
-        } else if (amount > currentBalance) {
-            $('#amountError').text('Insufficient funds. You cannot transfer more than your current balance.').show();
-            event.preventDefault();
-        } else {
-            $('#amountError').hide();
-        }
-    });
-});
-
     </script>
+
 }
