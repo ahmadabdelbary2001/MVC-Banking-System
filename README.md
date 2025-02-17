@@ -50,4 +50,15 @@ BlinkBank is an ASP.NET Core MVC web application that provides a secure and user
 - **Database:**
   - SQL Server for storing user and transaction data
 
+## Project Structure
+```
+BlinkBank/
+│── Controllers/         # Handles HTTP requests and application logic
+│── Models/             # Defines data models for the application
+│── Views/              # Contains Razor view templates for UI rendering
+│── ViewModels/         # View-specific models for passing data to the UI
+│── wwwroot/            # Static assets (CSS, JS, images)
+│── appsettings.json    # Configuration settings (database, authentication, etc.)
+│── Program.cs          # Application entry point
+```
 
