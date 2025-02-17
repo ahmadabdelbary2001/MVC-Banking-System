@@ -62,3 +62,40 @@ BlinkBank/
 │── Program.cs          # Application entry point
 ```
 
+## Installation & Setup
+
+### Prerequisites
+- .NET 6 SDK
+- SQL Server (LocalDB or another instance)
+- Visual Studio 2022 or VS Code with C# support
+
+### Installation
+1. **Clone the repository**
+   ```sh
+   git clone https://github.com/ahmadabdelbary2001/MVC-Banking-System.git
+   ```
+
+2. **Configure the Database Connection**
+Update the database connection string in `appsettings.json` to match your database configuration:  
+
+```json
+"ConnectionStrings": {
+    "DefaultConnection": "Server=YOUR_SERVER;Database=YOUR_DATABASE;User Id=YOUR_USER;Password=YOUR_PASSWORD;"
+}
+```
+
+3. **Run database migrations**
+   Run the following command in the Package Manager Console to apply migrations:
+   ```sh
+   Update-Database
+   ```
+   Alternatively, if using the .NET CLI, run:
+   ```sh
+   dotnet ef database update
+   ```
+   
+4. **Run the Application**
+   Using the .NET CLI:
+   ```sh
+   dotnet run
+   ```
