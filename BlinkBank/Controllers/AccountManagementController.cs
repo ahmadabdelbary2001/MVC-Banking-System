@@ -1,5 +1,6 @@
 ﻿using BlinkBank.Models;
 using BlinkBank.ViewModels;
+using BlinkBank.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,13 @@ namespace BlinkBank.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
-            // Check if the account already exists
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found!";
+                return RedirectToAction("Login", "Account");
+            }
+
+            // التحقق مما إذا كان الحساب موجودًا مسبقًا
             var existingAccount = await _context.Accounts
                 .Include(a => a.Customer)
                 .FirstOrDefaultAsync(a => a.Customer.Email == model.Email);
@@ -59,7 +66,7 @@ namespace BlinkBank.Controllers
                 return View(model);
             }
 
-            // Validate initial balance
+            // التحقق من الحد الأدنى للرصيد
             if (!model.InitialBalance.HasValue || model.InitialBalance <= 0)
             {
                 ModelState.AddModelError("InitialBalance", "Initial balance must be greater than zero.");
@@ -67,10 +74,17 @@ namespace BlinkBank.Controllers
                 return View(model);
             }
 
+            if (model.InitialBalance < BlinkBank.Constants.FinancialConstants.MIN_ACCOUNT_BALANCE)
+            {
+                ModelState.AddModelError("InitialBalance", $"Initial balance must be at least {BlinkBank.Constants.FinancialConstants.MIN_ACCOUNT_BALANCE}.");
+                TempData["ErrorMessage"] = $"Initial balance must be at least {BlinkBank.Constants.FinancialConstants.MIN_ACCOUNT_BALANCE}.";
+                return View(model);
+            }
+
             // ✅ **إعادة ضبط ModelState إذا كانت البيانات الآن صحيحة**
             ModelState.Clear();
 
-            // Create a new account
+            // إنشاء الحساب الجديد
             var newAccount = new Accounts
             {
                 ApplicationUserId = userId,

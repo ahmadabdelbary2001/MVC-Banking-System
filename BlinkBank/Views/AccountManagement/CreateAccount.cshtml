@@ -41,7 +41,7 @@
 
             <div class="form-input login-form__input-field">
                 <label asp-for="InitialBalance">Initial Balance</label>
-                <input asp-for="InitialBalance" type="number" placeholder="0" required>
+                <input asp-for="InitialBalance" id="initialBalance" type="number" placeholder="0" required>
                 <span asp-validation-for="InitialBalance" class="text-danger"></span>
             </div>
 
@@ -52,7 +52,33 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const minBalance = @BlinkBank.Constants.FinancialConstants.MIN_ACCOUNT_BALANCE; // الحد الأدنى من السيرفر
+            const balanceInput = document.querySelector('input[name="InitialBalance"]');
+            const form = document.querySelector('.auth_registration');
+            
+            form.addEventListener("submit", function (event) {
+                const value = parseFloat(balanceInput.value);
+                let errorMessage = "";
+
+                if (isNaN(value)) {
+                    errorMessage = "Please enter a valid number.";
+                } else if (value <= 0) {
+                    errorMessage = "Initial balance must be greater than zero.";
+                } else if (value < minBalance) {
+                    errorMessage = `Initial balance must be at least ${minBalance}.`;
+                }
+
+                if (errorMessage) {
+                    event.preventDefault(); // منع الإرسال إذا كان هناك خطأ
+                    let errorSpan = balanceInput.nextElementSibling;
+                    errorSpan.textContent = errorMessage;
+                    errorSpan.classList.add("text-danger");
+                }
+            });
+        });
+    </script>
 }

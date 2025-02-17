@@ -19,48 +19,49 @@
     </div>
     <div class="login-form__content">
 
-        <form asp-controller="Account" asp-action="Register" method="post" role="form" class="login-form__content-inner auth_registration">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form id="registerForm" asp-controller="Account" asp-action="Register" method="post" role="form" class="login-form__content-inner auth_registration">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="login-form__steps">
-                <div class="login-form__step active first">
-                    <div class="login-form__step-icon"></div>
-                    <div class="login-form__step-title">step 1</div>
-                </div>
-                <div class="login-form__line one"></div>
-                    <div class="login-form__step second">
-                    <div class="login-form__step-icon"></div>
-                    <div class="login-form__step-title">step 2</div>
-                </div>
+        <div class="login-form__steps">
+            <div class="login-form__step active first">
+                <div class="login-form__step-icon"></div>
+                <div class="login-form__step-title">step 1</div>
             </div>
-
-            <div class="form-input login-form__input-field">
-                <label asp-for="Name">Your Name</label>
-                <input type="text" asp-for="Name"
-                            placeholder="Your Name" required>
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="login-form__line one"></div>
+            <div class="login-form__step second">
+                <div class="login-form__step-icon"></div>
+                <div class="login-form__step-title">step 2</div>
             </div>
+        </div>
 
-            <div class="form-input login-form__input-field">
-                <label asp-for="Email">Your Email</label>
-                <input type="email" asp-for="Email" placeholder="user@mail.com" required>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+        <div class="form-input login-form__input-field">
+            <label asp-for="Name">Your Name</label>
+            <input type="text" asp-for="Name" placeholder="Your Name" required>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
 
-            <div class="form-input login-form__input-field">
-                <label asp-for="Password">Your Password</label>
-                <input type="password" asp-for="Password" placeholder="Password" required>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+        <div class="form-input login-form__input-field">
+            <label asp-for="Email">Your Email</label>
+            <input type="email" asp-for="Email" placeholder="user@mail.com" required>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
 
-            <div class="form-input login-form__input-field">
-                <label asp-for="ConfirmPassword">Confirm Password</label>
-                <input type="password" asp-for="ConfirmPassword" placeholder="Repeat Password" required>
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
+        <div class="form-input login-form__input-field">
+            <label asp-for="Password">Your Password</label>
+            <input id="password" type="password" asp-for="Password" placeholder="Password" required minlength="10">
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <small class="text-danger" id="passwordError"></small>
+        </div>
 
-            <button type="submit" class="login-form__login-btn step1" style="margin-top:16px;">Register Account</button>
-        </form>
+        <div class="form-input login-form__input-field">
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <input id="confirmPassword" type="password" asp-for="ConfirmPassword" placeholder="Repeat Password" required>
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            <small class="text-danger" id="confirmPasswordError"></small>
+        </div>
+
+        <button type="submit" class="login-form__login-btn step1" style="margin-top:16px;">Register Account</button>
+    </form>
 
         <div class="login-form__down-button">
             <span>Have an account?</span>
@@ -76,17 +77,43 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".animate").forEach(el => {
-                el.style.opacity = "0";
-                setTimeout(() => {
-                    el.style.transition = "opacity 1s ease-in-out";
-                    el.style.opacity = "1";
-                }, 300);
+            document.getElementById("registerForm").addEventListener("submit", function (event) {
+                var password = document.getElementById("password").value;
+                var confirmPassword = document.getElementById("confirmPassword").value;
+                var passwordError = document.getElementById("passwordError");
+                var confirmPasswordError = document.getElementById("confirmPasswordError");
+
+                var errors = [];
+
+                if (password.length < 10) {
+                    errors.push("Password must be at least 10 characters long.");
+                }
+                if (!/[A-Z]/.test(password)) {
+                    errors.push("Password must contain at least one uppercase letter.");
+                }
+                if (!/[a-z]/.test(password)) {
+                    errors.push("Password must contain at least one lowercase letter.");
+                }
+                if (!/[!\u0040#$%^&*(),.?\":{}|<>]/.test(password)) {
+                    errors.push("Password must contain at least one special character.");
+                }
+                if (password !== confirmPassword) {
+                    confirmPasswordError.innerText = "Passwords do not match.";
+                    event.preventDefault();
+                } else {
+                    confirmPasswordError.innerText = "";
+                }
+
+                if (errors.length > 0) {
+                    passwordError.innerText = errors.join("\n");
+                    event.preventDefault();
+                } else {
+                    passwordError.innerText = "";
+                }
             });
         });
     </script>

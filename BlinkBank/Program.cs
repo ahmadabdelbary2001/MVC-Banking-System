@@ -1,4 +1,4 @@
-using BlinkBank.Models;
+﻿using BlinkBank.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,16 +11,18 @@ builder.Services.AddDbContext<BankDBContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
-    option =>
+    options =>
     {
-        option.Password.RequireUppercase = false;
-        option.Password.RequiredUniqueChars = 0;
-        option.Password.RequiredLength = 8;
-        option.Password.RequireNonAlphanumeric = false;
-        option.Password.RequireLowercase = false;
-    }
-    )
-    .AddEntityFrameworkStores<BankDBContext>().AddDefaultTokenProviders().AddRoles<IdentityRole>();
+        options.Password.RequireUppercase = true; // يجب أن تحتوي على حرف كبير
+        options.Password.RequireLowercase = true; // يجب أن تحتوي على حرف صغير
+        options.Password.RequireNonAlphanumeric = true; // يجب أن تحتوي على رمز خاص
+        options.Password.RequireDigit = true; // يجب أن تحتوي على رقم
+        options.Password.RequiredUniqueChars = 3; // يجب أن تحتوي على 3 أحرف فريدة على الأقل
+        options.Password.RequiredLength = 10; // الحد الأدنى للطول هو 10
+    })
+    .AddEntityFrameworkStores<BankDBContext>()
+    .AddDefaultTokenProviders()
+    .AddRoles<IdentityRole>();
 builder.Services.AddAuthentication().AddCookie("cookie");
 builder.Services.AddAuthorization();
 
