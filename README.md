@@ -76,13 +76,13 @@ BlinkBank/
    ```
 
 2. **Configure the Database Connection**
-Update the database connection string in `appsettings.json` to match your database configuration:  
+   Update the database connection string in `appsettings.json` to match your database configuration:  
 
-```json
-"ConnectionStrings": {
-    "DefaultConnection": "Server=YOUR_SERVER;Database=YOUR_DATABASE;User Id=YOUR_USER;Password=YOUR_PASSWORD;"
-}
-```
+   ```json
+   "ConnectionStrings": {
+       "DefaultConnection": "Server=YOUR_SERVER;Database=YOUR_DATABASE;User Id=YOUR_USER;Password=YOUR_PASSWORD;"
+   }
+   ```
 
 3. **Run database migrations**
    Run the following command in the Package Manager Console to apply migrations:
