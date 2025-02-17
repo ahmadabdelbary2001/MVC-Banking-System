@@ -262,6 +262,15 @@ namespace BlinkBank.Controllers
             return RedirectToAction("Index", "Transactions", new { accountId = sourceAccount.Id });
         }
 
+        public IActionResult GetAlerts()
+        {
+            return PartialView("_AlertsPartial");
+        }
+
+        public IActionResult GetUserInfo()
+        {
+            return PartialView("_UserInfoPartial");
+        }
 
     }
 }
