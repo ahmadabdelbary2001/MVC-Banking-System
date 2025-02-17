@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "_LayoutGuest";
+}
+
+@Html.Partial("_LoginRegister")
+
+<section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title aos-init aos-animate" data-aos="fade-up">
+        <h2>Contact Us</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          </div>
+
+          <div class="col-lg-7">
+            <form asp-action="SaveContact" method="post" role="form" class="php-email-form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+             @Html.AntiForgeryToken()
+             <div class="row gy-4">
+
+                <div class="col-md-12 text-center">
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Your message has been sent. Thank you!</div>
+
+                  <button type="submit">Send Message</button>
+                </div>
+
+              </div>
+            </form>
+          </div><!-- End Contact Form -->
+
+        </div>
+
+      </div>
+
+    </section>

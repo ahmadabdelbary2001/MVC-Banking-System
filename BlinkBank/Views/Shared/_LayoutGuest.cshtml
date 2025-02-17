@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>BLINKBANK @ViewData["Title"]</title>
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="~/css/sign-in-up.css" rel="stylesheet">
+    <link href="~/css/register.css" rel="stylesheet">
+   </head>
+
+<body cz-shortcut-listen="true">
+    <!-- begin page content -->
+    <div class="page">
+        <div class="page-background js-canvas-container">
+            <canvas class="scene scene-bottom" data-position="center" width="1400" height="700" style="width: 1400px; height: 700px;"></canvas>
+        </div>
+
+        <header class="header">
+            <a href="/Home/index" class="blink-bank">
+               <div class="icon-container">
+                  <i class="fas fa-university"></i>
+               </div>
+               <div class="text-container">BLINKBANK</div>
+            </a>
+
+            <div class="header-menu">
+                <nav class="menu">
+                    <ul class="main-menu">
+                        <li class="active">
+                            <a href="/Home/index" class="nav-link">Home</a>
+                        </li>
+                        <li>
+                            <a href="https://payeer.com/en/trade/">EXCHANGE</a>
+                        </li>
+                        <li>
+                            <a href="https://payeer.com/en/solutions/">Solutions</a>
+                        </li>
+                        <li>
+                            <a href="https://payeer.com/en/solutions/">Contacts</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+    </div>
+
+    @RenderBody()
+
+    @await RenderSectionAsync("Scripts", required: false);
+
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["SuccessMessage"]';
+            var errorMessage = '@TempData["ErrorMessage"]';
+
+            if (successMessage) {
+                toastr.success(successMessage, "Success");
+            }
+
+            if (errorMessage) {
+                toastr.error(errorMessage, "Error", { positionClass: "toast-top-right" });
+        @TempData.Remove("ErrorMessage");
+            }
+        });
+    </script>
+
+</body>
+
+</html>

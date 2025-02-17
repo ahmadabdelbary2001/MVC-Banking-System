@@ -1,0 +1,93 @@
+﻿@model BlinkBank.ViewModels.RegisterVM
+@{
+    Layout = "_LayoutGuest";
+    ViewData["Title"] = " | Register";
+}
+
+<div class="page">
+    <div class="page-background js-canvas-container">
+        <canvas class="scene scene-bottom" data-position="center" width="1400" height="700" style="width: 1400px; height: 700px;"></canvas>
+    </div>
+
+    <div class="login-form__titles-head">
+        <div class="login-form__sub-head">
+            electronic wallet
+        </div>
+        <div class="login-form__title-head">
+            Create Account
+        </div>
+    </div>
+    <div class="login-form__content">
+
+        <form asp-controller="Account" asp-action="Register" method="post" role="form" class="login-form__content-inner auth_registration">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="login-form__steps">
+                <div class="login-form__step active first">
+                    <div class="login-form__step-icon"></div>
+                    <div class="login-form__step-title">step 1</div>
+                </div>
+                <div class="login-form__line one"></div>
+                    <div class="login-form__step second">
+                    <div class="login-form__step-icon"></div>
+                    <div class="login-form__step-title">step 2</div>
+                </div>
+            </div>
+
+            <div class="form-input login-form__input-field">
+                <label asp-for="Name">Your Name</label>
+                <input type="text" asp-for="Name"
+                            placeholder="Your Name" required>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-input login-form__input-field">
+                <label asp-for="Email">Your Email</label>
+                <input type="email" asp-for="Email" placeholder="user@mail.com" required>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-input login-form__input-field">
+                <label asp-for="Password">Your Password</label>
+                <input type="password" asp-for="Password" placeholder="Password" required>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-input login-form__input-field">
+                <label asp-for="ConfirmPassword">Confirm Password</label>
+                <input type="password" asp-for="ConfirmPassword" placeholder="Repeat Password" required>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="login-form__login-btn step1" style="margin-top:16px;">Register Account</button>
+        </form>
+
+        <div class="login-form__down-button">
+            <span>Have an account?</span>
+            <a asp-action="Login" class="login-form__btn">
+                <svg width="35" height="16" viewBox="0 0 35 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M21.0156 4.25C22.526 1.74999 24.6875 0.5 27.5 0.5C29.5833 0.5 31.3542 1.22916 32.8125 2.6875C34.2708 4.14584 35 5.91666 35 8C35 10.0833 34.2708 11.8542 32.8125 13.3125C31.3542 14.7708 29.5833 15.5 27.5 15.5C24.5833 15.5 22.3958 14.25 20.9375 11.75C20.1042 11.3854 19.0365 11.0729 17.7344 10.8125C17.6302 10.8125 17.487 10.6693 17.3047 10.3828C17.1224 10.0964 16.9531 9.95312 16.7969 9.95312H15.2344C15.0781 9.95312 14.9089 10.0443 14.7266 10.2266C14.5443 10.4089 14.4271 10.5 14.375 10.5H13.125C12.9167 10.5 12.7604 10.474 12.6562 10.4219L12.5781 10.3438H12.5L12.4219 10.1875L12.1094 9.875H12.0312C11.875 9.71875 11.7188 9.64062 11.5625 9.64062L11.25 9.5625H10.8594C10.651 9.5625 10.4427 9.66667 10.2344 9.875L9.76562 10.3438C9.60937 10.5 9.40104 10.5781 9.14062 10.5781H8.59375C8.33333 10.5781 8.09896 10.474 7.89062 10.2656L7.5 9.875C7.29167 9.66667 7.13542 9.5625 7.03125 9.5625H5.15625C4.94792 9.5625 4.73958 9.66667 4.53125 9.875H4.45312L4.0625 10.2656C3.90625 10.4219 3.69792 10.5 3.4375 10.5H2.03125C1.04166 10.5 0.442709 10.2656 0.234375 9.79688C0.0781242 9.32812 0 8.72917 0 8C0 7.16666 0.208331 6.55469 0.625 6.16406C1.04167 5.77344 1.77083 5.55208 2.8125 5.5C7.03127 5.13542 10.7552 4.90104 13.9844 4.79688L21.0156 4.25ZM31.7969 9.79688C32.2656 9.32812 32.5 8.72917 32.5 8C32.5 7.27083 32.2656 6.67188 31.7969 6.20313C31.3281 5.73437 30.7292 5.5 30 5.5C29.2708 5.5 28.6719 5.73437 28.2031 6.20313C27.7344 6.67188 27.5 7.27083 27.5 8C27.5 8.72917 27.7344 9.32812 28.2031 9.79688C28.6719 10.2656 29.2708 10.5 30 10.5C30.7292 10.5 31.3281 10.2656 31.7969 9.79688Z" fill="#03A9F4"></path>
+                </svg>
+                LOGIN
+            </a>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".animate").forEach(el => {
+                el.style.opacity = "0";
+                setTimeout(() => {
+                    el.style.transition = "opacity 1s ease-in-out";
+                    el.style.opacity = "1";
+                }, 300);
+            });
+        });
+    </script>
+}

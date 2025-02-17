@@ -1,0 +1,94 @@
+﻿@model BlinkBank.Models.Accounts
+
+@{
+    ViewData["Title"] = "Withdraw";
+    ViewData["ActivePage"] = "Withdraw";
+}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Withdraw</h1>
+    <p class="mb-4">Enter the amount you want to withdraw.</p>
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Withdraw</h6>
+                </div>
+
+                <div class="card-body">
+                    <form asp-controller="Transactions" asp-action="Withdraw" method="post" class="user">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <input type="hidden" name="accountId" value="@Model.Id" />
+
+                        <!-- Amount -->
+                        <div class="form-group">
+                            <label for="Amount" class="form-label text-muted">Amount</label>
+                            <input type="number" name="amount" step="0.01" class="form-control"
+                                    placeholder="Enter Amount" required />
+                            <span id="amountError" class="text-danger" style="display: none;">
+                                You should not put a negative amount.
+                            </span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-user btn-block">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function (event) {
+                var amount = parseFloat($('input[name="amount"]').val());
+                if (amount <= 0) {
+                    $('#amountError').show();
+                    event.preventDefault();
+                } else {
+                    $('#amountError').hide();
+                }
+            });
+        });
+
+        $(document).ready(function () {
+    $('form').submit(function (event) {
+        var amount = parseFloat($('input[name="amount"]').val());
+        var currentBalance = parseFloat('@Model.InitialBalance');  
+        
+        if (amount <= 0) {
+            $('#amountError').text('Withdraw amount must be greater than zero.').show();
+            event.preventDefault();
+        } else if (amount > currentBalance) {
+            $('#amountError').text('Insufficient funds. You cannot transfer more than your current balance.').show();
+            event.preventDefault();
+        } else {
+            $('#amountError').hide();
+        }
+    });
+});
+
+    </script>
+}

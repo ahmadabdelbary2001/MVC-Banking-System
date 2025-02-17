@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlinkBank", "BlinkBank\BlinkBank.csproj", "{B207A110-C9C8-4C65-820B-6DF66F54AF01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B207A110-C9C8-4C65-820B-6DF66F54AF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B207A110-C9C8-4C65-820B-6DF66F54AF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B207A110-C9C8-4C65-820B-6DF66F54AF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B207A110-C9C8-4C65-820B-6DF66F54AF01}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AD84C611-5732-414C-BA95-0657505EA79C}
+	EndGlobalSection
+EndGlobal

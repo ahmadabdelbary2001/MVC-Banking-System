@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "_LayoutGuest";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    @Html.Partial("_MyAccount")
+}
+else
+{
+    @Html.Partial("_LoginRegister")
+}
+
+<!-- About Section -->
+<div class="page">
+    <div class="page-background js-canvas-container">
+        <canvas class="scene scene-bottom" data-position="center" width="1400" height="700" style="width: 1400px; height: 700px;"></canvas>
+    </div>
+
+    <div class="welcome">
+        <span style="font-family: 'Futura New', Arial Narrow, sans-serif;"> </span>
+        <div class="title page-title">
+            <h1>Footer</h1>
+        </div>
+    </div>
+</div>

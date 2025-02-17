@@ -1,0 +1,85 @@
+﻿@model HistoryPageData
+
+@{
+    ViewData["Title"] = "History";
+    ViewData["ActivePage"] = "TransactionHistory";
+}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Transactions History</h1>
+    <p class="mb-4">The table below provides a detailed record of all transactions associated with your account.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Source Account</th>
+                            <th>Target Account</th>
+                        </tr>
+                    </thead>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Source Account</th>
+                            <th>Target Account</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var transaction in Model.Transactions)
+                        {
+                            <tr>
+                                <td>@transaction.Id</td>
+                                <td>@transaction.TransactionType</td>
+                                <td>@transaction.Amount.ToString("C")</td>
+                                <td>@transaction.Date.ToShortDateString()</td>
+                                <td>@transaction.sourceAccountNumber</td>
+                                <td>@transaction.targetAccountNumber</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    $(document).ready(function() {
+        $('#transactionsTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "lengthMenu": [10, 25, 50, 100], // Custom entries per page
+            "language": {
+                "search": "Search Transactions:🔍 ",
+                "lengthMenu": "Show _MENU_ entries",
+                "info": "Showing _START_ to _END_ of _TOTAL_ transactions",
+                "paginate": {
+                    "next": "Next",
+                    "previous": "Previous"
+                }
+            }
+        });
+    });
+</script>

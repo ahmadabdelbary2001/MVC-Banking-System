@@ -1,0 +1,58 @@
+﻿@model BlinkBank.ViewModels.CreateAccountViewModel
+
+@{
+    Layout = "_LayoutGuest";
+    ViewData["Title"] = " | Create Account";
+}
+
+<div class="page">
+    <div class="page-background js-canvas-container">
+        <canvas class="scene scene-bottom" data-position="center" width="1400" height="700" style="width: 1400px; height: 700px;"></canvas>
+    </div>
+
+    <div class="login-form__titles-head">
+        <div class="login-form__sub-head">
+            initial balance
+        </div>
+        <div class="login-form__title-head">
+            Create Account
+        </div>
+    </div>
+    <div class="login-form__content">
+
+        <form asp-controller="AccountManagement" asp-action="CreateAccount" method="post" role="form" class="login-form__content-inner auth_registration">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="login-form__steps">
+                <div class="login-form__step active first">
+                    <div class="login-form__step-icon"></div>
+                    <div class="login-form__step-title">step 1</div>
+                </div>
+                <div class="login-form__line one"></div>
+                    <div class="login-form__step active second">
+                    <div class="login-form__step-icon"></div>
+                    <div class="login-form__step-title">step 2</div>
+                </div>
+            </div>
+
+            <input type="hidden" name="Name" value="@TempData["RegisteredName"]" />
+            <input type="hidden" name="Email" value="@TempData["RegisteredEmail"]" />
+
+
+            <div class="form-input login-form__input-field">
+                <label asp-for="InitialBalance">Initial Balance</label>
+                <input asp-for="InitialBalance" type="number" placeholder="0" required>
+                <span asp-validation-for="InitialBalance" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="login-form__login-btn step1" style="margin-top:16px;">Create Account</button>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,86 @@
+﻿@model BlinkBank.ViewModels.LoginVM
+@{
+    Layout = "_LayoutGuest";
+    ViewData["Title"] = " | Login";
+}
+
+<div class="page">
+    <div class="page-background js-canvas-container">
+        <canvas class="scene scene-bottom" data-position="center" width="1400" height="700" style="width: 1400px; height: 700px;"></canvas>
+    </div>
+
+    <div class="login-form__titles-head">
+        <div class="login-form__sub-head">
+            authorization
+        </div>
+        <div class="login-form__title-head">
+            Login
+        </div>
+    </div>
+    <div class="login-form__content">
+
+        <form asp-controller="Account" asp-action="Login" method="post" role="form" class="login-form__content-inner auth_registration">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-input login-form__input-field">
+                <label asp-for="Email">Your Email</label>
+                <input type="email" asp-for="Email" placeholder="user@mail.com" required>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-input login-form__input-field">
+                <label asp-for="Password">Your Password</label>
+                <input type="password" asp-for="Password" placeholder="Password" required>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div>
+                <div>
+                    <input asp-for="RememberMe" type="checkbox">
+                    <label for="customCheck">@Html.DisplayNameFor(a => a.RememberMe)</label>
+                </div>
+            </div>
+
+            <button type="submit" class="login-form__login-btn step1" style="margin-top:16px;">Login</button>
+        </form>
+
+        <div class="login-form__down-button">
+            <span>Don’t have an account?</span>
+            <a asp-action="Register" class="login-form__btn create-account">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="25px" height="30px" viewBox="0 0 25 30" enable-background="new 0 0 25 30" xml:space="preserve">
+                   <image id="image1" width="25" height="30" x="0" y="0" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAeCAQAAABz5X1QAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+                   AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElN
+                   RQfiDBgXBDSbtAYcAAABfElEQVQ4y5WSsUvUYRyHn/fn6Q2ZpFYHGfYH1JCTs5DQ2lKLDtIc0uIY
+                   5BYGjeEi4hZu4hI0ZIkmCN1xpVJzgdFZQzro3T0OYnin9/7u93y3L+/zfd/P+75IpAoWLXuzsRsT
+                   Bv2u6o9GqbUw4LanbDmYrvRY8ixl++JKoUlQ/WahtdLtuhex7g2RINznHnlqXOaASWCNYS5mngnA
+                   x2fmjHnLHVszdrKLHPGZBJlmmeeMU8Fz8wN1ZpkDwGdeabgp0ioI4zygixp55LBFikAHRV7yB3Da
+                   9vlgIriXQdEhSegkC1ch4SiT0gW51EWrfOKQBAjk2SA1y0zTFV9Li/9TfGRFraq/rbjvQlxZEd+p
+                   mz717WkzrqyKK/4zJ2JR1b9JNHoActSoAvALgHpcqQIH9PCK20wxCkB3/GDb4oumXim4R29kn4cs
+                   codLQJ0agX7KaU/5hrt8JOEkQI4l6lm/5aj//XYJZP7J+5DwPoOwy1cIXuc1I20JX3hCCY4B5/Ks
+                   rqdIQPQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMTItMjVUMDY6MDQ6NTItMDc6MDBBc7LnAAAA
+                   JXRFWHRkYXRlOm1vZGlmeQAyMDE4LTEyLTI1VDA2OjA0OjUyLTA3OjAwMC4KWwAAABl0RVh0U29m
+                   dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAASUVORK5CYII="></image>
+                </svg>
+                CREATE
+            </a>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".animate").forEach(el => {
+                el.style.opacity = "0";
+                setTimeout(() => {
+                    el.style.transition = "opacity 1s ease-in-out";
+                    el.style.opacity = "1";
+                }, 300);
+            });
+        });
+    </script>
+}

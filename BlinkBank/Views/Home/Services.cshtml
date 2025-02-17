@@ -1,0 +1,52 @@
+﻿@{
+    Layout = "_LayoutGuest";
+}
+
+@Html.Partial("_LoginRegister")
+<section id="services" class="services section">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Services</h2>
+        <p>Select a service you want to perform:</p>
+    </div>
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-item position-relative">
+                    <div class="icon">
+                        <i class="bi bi-activity"></i>
+                    </div>
+                    <a href="/Services/Deposit" class="stretched-link">
+                        <h3>Deposit</h3>
+                    </a>
+                    <p>Deposit funds into your account securely.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-item position-relative">
+                    <div class="icon">
+                        <i class="bi bi-broadcast"></i>
+                    </div>
+                    <a href="/Services/Withdraw" class="stretched-link">
+                        <h3>Withdraw</h3>
+                    </a>
+                    <p>Withdraw funds from your account conveniently.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-item position-relative">
+                    <div class="icon">
+                        <i class="bi bi-easel"></i>
+                    </div>
+                    <a href="/Services/Transfer" class="stretched-link">
+                        <h3>Transfer</h3>
+                    </a>
+                    <p>Transfer funds to other accounts securely.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
