@@ -100,3 +100,6 @@ BlinkBank/
    ```sh
    dotnet run
    ```
+
+## License 
+[MIT License](LICENSE)
